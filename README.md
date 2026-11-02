@@ -1,5 +1,8 @@
 # 팡팡파라팡 (PangPang) — 안드로이드 프로젝트
 
+- 웹에서 바로 해보기: https://niaxcroknit.github.io/pangpang/
+- 개인정보처리방침: https://niaxcroknit.github.io/pangpang/privacy.html
+
 게임은 `app/src/main/assets/` 폴더에 있어요.
 - `index.html`: 게임 규칙·레벨·화면 구성
 - `redesign.css`: 화면 디자인
@@ -29,7 +32,7 @@
 4. **서명 키 파일과 비밀번호는 꼭 따로 백업해 두세요.** 잃어버리면 업데이트를 올릴 수 없어요. (Play 앱 서명을 켜 두면 Google이 배포용 키를 대신 보관해 줘요.)
 5. 업데이트할 때마다 `app/build.gradle` 의 `versionCode` 를 1씩 올리고, `versionName` 도 바꿔요(예: 1.0 → 1.1).
 
-스토어 설명, 아이콘·그래픽·스크린샷, 개인정보처리방침은 `play-store` 폴더에 있어요. 개인정보처리방침 공개 링크: https://app.notion.com/p/4024235ad3ee80b3b4ffe74ae7240d02
+스토어 설명, 아이콘·그래픽·스크린샷, 개인정보처리방침은 `play-store` 폴더에 있어요. 개인정보처리방침 공개 링크: https://niaxcroknit.github.io/pangpang/privacy.html
 
 ## 설정과 점수
 - 첫 화면 오른쪽 위 톱니바퀴: 소리, 진동, 어두운 화면, 큰 글씨, 누르기로 잇기
