@@ -1,0 +1,16 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+# 서명 키는 절대 올리지 마세요
+*.jks
+*.keystore
+keystore.properties
+# 출시 파일
+*.aab
+*.apk
