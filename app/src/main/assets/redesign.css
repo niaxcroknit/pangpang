@@ -184,3 +184,69 @@ html.big .tile .face{font-size:clamp(32px,12.5cqw,100px)}
 .tr-box{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;padding:12px;font:600 14px/1.5 var(--body);color:var(--ink);background:var(--surface);resize:none;word-break:break-all}
 .card .set-row .chev{font-style:normal;font-size:24px;color:var(--muted);flex:none}
 @media (min-width:600px) and (min-height:700px){.card .share-btn{min-height:62px;font-size:19px}.share-img{width:min(100%,380px)}}
+
+/* ===== 얼음 블록 (시안 B) — 기존 색은 그대로 쓰고 얼음 질감만 얹어요 ===== */
+:root{--frost:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  --crack:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='white' stroke-linecap='round'%3E%3Cpath d='M64 100 L70 78 L62 66 L74 52' stroke-width='1.3' opacity='.75'/%3E%3Cpath d='M70 78 L84 72' stroke-width='.9' opacity='.6'/%3E%3Cpath d='M0 36 L14 40 L22 32' stroke-width='1' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+  --ice-hi:.92;--ice-mid:.35;--ice-facet:.55;--ice-rim:.95;--ice-glow:.7;--surface:rgba(255,255,255,.72);
+  --page:linear-gradient(180deg,#eef5fb 0%,#f6f8fc 45%,#fbf4f7 100%)}
+:root[data-theme="dark"]{--surface:rgba(255,255,255,.05);
+  --page:linear-gradient(180deg,#161b29 0%,#191d2b 45%,#1f1b2a 100%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:rgba(255,255,255,.05);--page:linear-gradient(180deg,#161b29 0%,#191d2b 45%,#1f1b2a 100%)}}
+/* 화면 전체에 아주 옅은 얼음빛 배경 */
+html,body{background:var(--page) fixed!important;min-height:100%}
+.modal{background:var(--page) fixed!important}
+.card{background:transparent}
+/* 블록 */
+.tile .face{--base:var(--pos);--deep:color-mix(in oklch,var(--pos),var(--selected) 32%);--ink:color-mix(in oklch,var(--selected),black 48%);
+  isolation:isolate;overflow:hidden;border-radius:20%!important;color:var(--ink)!important;background-color:var(--base);
+  background-image:
+    linear-gradient(118deg,rgba(255,255,255,0) 0 52%,rgba(255,255,255,var(--ice-facet)) 52% 55%,rgba(255,255,255,calc(var(--ice-facet)*.22)) 55% 63%,rgba(255,255,255,0) 63%),
+    linear-gradient(140deg,rgba(255,255,255,var(--ice-hi)) 0%,rgba(255,255,255,var(--ice-mid)) 26%,rgba(255,255,255,0) 50%),
+    linear-gradient(140deg,transparent 35%,var(--deep) 115%)!important;
+  border:2px solid rgba(255,255,255,var(--ice-rim));
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,calc(var(--ice-rim)*.35)),inset 0 0 8px 1px rgba(255,255,255,var(--ice-glow)),
+    0 0 0 1px color-mix(in srgb,var(--deep) 30%,transparent),0 2px 4px -2px rgba(70,110,170,.25)!important;
+  text-shadow:0 0 8px rgba(255,255,255,var(--ice-glow)),0 1px 0 rgba(255,255,255,calc(var(--ice-glow)*.9))}
+.tile .face.n{--base:var(--neg);--deep:color-mix(in oklch,var(--neg),#1d6fd1 30%);--ink:color-mix(in oklch,var(--neg),#06264f 85%)}
+.tile .face.z{--base:var(--zero);--deep:color-mix(in oklch,var(--zero),#5a6380 30%);--ink:#30364e}
+/* 가장자리 서리 */
+.tile .face:before{content:'';position:absolute;inset:0;z-index:-1;opacity:.35;background:var(--frost);mix-blend-mode:screen;
+  -webkit-mask:radial-gradient(70% 70% at 50% 50%,transparent 35%,#000 100%);mask:radial-gradient(70% 70% at 50% 50%,transparent 35%,#000 100%)}
+/* 잔금과 작은 기포 (블록마다 방향이 달라요) */
+.tile .face:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:var(--crack) center/100% 100% no-repeat,
+   radial-gradient(circle at 24% 70%,rgba(255,255,255,.85) 0 1.6%,transparent 2.4%),
+   radial-gradient(circle at 30% 80%,rgba(255,255,255,.6) 0 1%,transparent 1.6%),
+   radial-gradient(circle at 80% 24%,rgba(255,255,255,.7) 0 1.2%,transparent 2%)}
+.tile:nth-child(3n+1) .face:after{transform:scaleX(-1)}
+.tile:nth-child(3n+2) .face:after{transform:rotate(180deg)}
+.tile:nth-child(4n) .face:after{transform:scaleY(-1)}
+.tile.locked .face:after,.tile.locked .face:before{display:none}
+/* 이을 때: 누른 블록과 연결이 한 덩어리 젤리로 섞여요. 덩어리는 판 아래(#bridges)에 그리고, 블록에는 얼음 광택만 남겨요 */
+.tile.sel .face{border-color:transparent!important;background-color:transparent!important;--ink:color-mix(in oklch,var(--selected),black 62%);
+  background-image:
+    linear-gradient(118deg,rgba(255,255,255,0) 0 52%,rgba(255,255,255,calc(var(--ice-facet)*.7)) 52% 55%,rgba(255,255,255,calc(var(--ice-facet)*.15)) 55% 63%,rgba(255,255,255,0) 63%),
+    linear-gradient(140deg,rgba(255,255,255,calc(var(--ice-hi)*.6)) 0%,rgba(255,255,255,calc(var(--ice-mid)*.35)) 26%,rgba(255,255,255,0) 50%)!important;
+  box-shadow:none!important;text-shadow:0 0 6px rgba(255,255,255,calc(var(--ice-glow)*1.1))}
+.tile.sel .face:before{opacity:.2}
+#bridges{filter:url(#goo)}
+.bridge,.blob{fill:var(--selected)}
+
+/* ===== 랭킹 ===== */
+.rank-line{display:block;width:100%;min-height:48px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:800 16px/1.3 var(--body);padding:12px 14px;cursor:pointer}
+.rank-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px}
+.rank-tabs button{min-height:44px;border:0;border-radius:10px;background:none;color:var(--muted);font:800 16px var(--body);cursor:pointer}
+.rank-tabs button.on{background:var(--selected);color:#fff}
+.rank-list{display:flex;flex-direction:column;gap:6px;max-height:min(52svh,440px);overflow-y:auto;padding:2px}
+.rank-row{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;min-height:48px;padding:8px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);text-align:left}
+.rank-row .rk{font:900 18px var(--body);color:var(--muted);text-align:center}
+.rank-row .nm{font:800 17px var(--body);color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-row .sc{font:900 17px var(--body);color:var(--ink);font-variant-numeric:tabular-nums}
+.rank-row.top1 .rk{color:#e0a100}.rank-row.top2 .rk{color:#8f9bb3}.rank-row.top3 .rk{color:#c9783f}
+.rank-row.me{border:2px solid var(--selected);background:color-mix(in srgb,var(--selected) 12%,var(--surface))}
+.rank-empty{color:var(--muted);font-weight:700;font-size:16px;padding:24px 8px;text-align:center}
+.rank-me{color:var(--ink);font-weight:800;font-size:15px;min-height:20px;margin:0;text-align:center}
+.nick-in{font:800 20px var(--body);text-align:center}
+.nick-err{color:var(--accent);font-weight:800;font-size:15px;min-height:20px;margin:0}
+.quiet-icon#btnRank svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}

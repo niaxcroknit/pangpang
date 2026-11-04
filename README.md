@@ -46,10 +46,18 @@
 - `compileSdk`/`targetSdk` 36, Android Gradle Plugin 8.11.1. 처음 열 때 Android Studio가 Gradle이나 플러그인 업그레이드를 권하면 **업그레이드해도 괜찮아요.**
 - 뒤로가기: Android 13 이상은 새 방식(`OnBackInvokedCallback`), 그 아래는 예전 방식으로 처리해요.
 - Android 15 이상은 화면이 상태바 밑까지 깔려서, 시스템 바 높이만큼 여백을 줘요.
-- 게임 파일은 `https://appassets.androidplatform.net/assets/`라는 앱 안 주소로 열어요(인터넷 연결은 하지 않아요). 결과 그림 만들기와 복사 기능 때문에 필요해요.
+- 게임 파일은 `https://appassets.androidplatform.net/assets/`라는 앱 안 주소로 열어요(게임 파일은 앱 안에 있어요. 인터넷은 랭킹에만 써요). 결과 그림 만들기와 복사 기능 때문에 필요해요.
 
 ## 자랑하기 · 기록 옮기기 · 의견
+- 첫 화면 트로피 버튼: 무한 모드 랭킹(이번 주 · 전체)
 - 결과 화면의 **카톡으로 자랑하기**: 결과 카드 그림을 만들어 카카오톡으로 바로 보내요. 카톡이 없으면 공유 목록이 떠요(`ShareProvider.java`, `MainActivity`의 `shareImage`).
 - 설정 › **기록 옮기기**: 기록 전체를 `PANG1.`로 시작하는 코드로 복사하고, 새 폰에서 붙여 넣어 불러와요.
 - 설정 › **의견 보내기**: 메일 앱을 열어 kimseohappiness@gmail.com 으로 보내요(`MainActivity`의 `sendMail`).
 - 무한 모드는 오래 할수록 돌려받는 기회가 줄어서 언젠가 끝나요(`endlessBonus`).
+
+## 무한 모드 랭킹 (Supabase)
+- 서버: Supabase 프로젝트 `ppojjak` 안의 `pangpang_runs` 표와 함수 `pangpang_submit`, `pangpang_board`, `pangpang_rename` (팡팡파라팡 전용, 다른 표와 섞이지 않아요)
+- 앱은 `index.html`의 `RANK_URL`, `RANK_KEY`(공개용 publishable 키)로 함수만 불러요. 표는 직접 읽거나 쓸 수 없게 잠겨 있어요.
+- 랭킹 이름을 정한 사람만 무한 모드가 끝날 때 점수가 올라가요. 인터넷이 없으면 가장 높은 기록을 기억해 뒀다가 다음에 올려요.
+- 말이 안 되는 점수(터뜨린 횟수에 비해 너무 높거나 너무 빠른 기록)와 10초 안에 연달아 올리는 것은 서버에서 거절해요. 금지어는 `banned_words` 표를 같이 써요.
+- 기록 지우기(요청이 오면): Supabase SQL 편집기에서 `delete from public.pangpang_runs where nick = '이름';`

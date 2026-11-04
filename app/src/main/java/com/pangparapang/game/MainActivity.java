@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Insets;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,12 +66,12 @@ public class MainActivity extends Activity {
             }
         });
         web.addJavascriptInterface(new Bridge(), "PangApp");
-        web.setBackgroundColor(Color.WHITE);
+        web.setBackgroundColor(Color.TRANSPARENT);
 
         // Android 15부터는 화면이 상태바·내비게이션바 밑까지 깔려요(Android 16을 대상으로 하면 끌 수 없어요).
         // 그래서 시스템 바 높이만큼 여백을 줘서 게임이 가리지 않게 해요.
         root = new FrameLayout(this);
-        root.setBackgroundColor(Color.WHITE);
+        root.setBackground(pageBackground(isSystemDark()));
         root.addView(web, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         if (Build.VERSION.SDK_INT >= 35) {
             root.setOnApplyWindowInsetsListener((v, insets) -> {
@@ -104,6 +105,14 @@ public class MainActivity extends Activity {
         if (path.endsWith(".svg")) return "image/svg+xml";
         if (path.endsWith(".woff2")) return "font/woff2";
         return "application/octet-stream";
+    }
+
+    /** 게임 화면과 같은 옅은 얼음빛 배경(위 하늘빛 → 아래 분홍빛). 상태바·내비게이션바 자리까지 이어져요. */
+    private static GradientDrawable pageBackground(boolean dark) {
+        int[] c = dark
+                ? new int[]{Color.parseColor("#161B29"), Color.parseColor("#191D2B"), Color.parseColor("#1F1B2A")}
+                : new int[]{Color.parseColor("#EEF5FB"), Color.parseColor("#F6F8FC"), Color.parseColor("#FBF4F7")};
+        return new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, c);
     }
 
     private boolean isSystemDark() {
@@ -152,13 +161,11 @@ public class MainActivity extends Activity {
         public void setDark(boolean dark) {
             runOnUiThread(() -> {
                 Window w = getWindow();
-                int bg = dark ? Color.parseColor("#191D2B") : Color.WHITE;
-                root.setBackgroundColor(bg);
-                web.setBackgroundColor(bg);
-                w.getDecorView().setBackgroundColor(bg);
+                root.setBackground(pageBackground(dark));
+                w.getDecorView().setBackgroundColor(dark ? Color.parseColor("#191D2B") : Color.parseColor("#F6F8FC"));
                 if (Build.VERSION.SDK_INT < 35) {
-                    w.setStatusBarColor(bg);
-                    w.setNavigationBarColor(bg);
+                    w.setStatusBarColor(dark ? Color.parseColor("#161B29") : Color.parseColor("#EEF5FB"));
+                    w.setNavigationBarColor(dark ? Color.parseColor("#1F1B2A") : Color.parseColor("#FBF4F7"));
                 }
                 if (Build.VERSION.SDK_INT >= 30) {
                     WindowInsetsController c = w.getInsetsController();
