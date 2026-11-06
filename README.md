@@ -61,3 +61,10 @@
 - 랭킹 이름을 정한 사람만 무한 모드가 끝날 때 점수가 올라가요. 인터넷이 없으면 가장 높은 기록을 기억해 뒀다가 다음에 올려요.
 - 말이 안 되는 점수(터뜨린 횟수에 비해 너무 높거나 너무 빠른 기록)와 10초 안에 연달아 올리는 것은 서버에서 거절해요. 금지어는 `banned_words` 표를 같이 써요.
 - 기록 지우기(요청이 오면): Supabase SQL 편집기에서 `delete from public.pangpang_runs where nick = '이름';`
+
+## 진행 기록 자동 저장 (Supabase)
+- 단계를 하나 깨면 기기마다 12자리 기록 코드(`save.cloud`)가 생기고, 저장할 때마다 몇 초 뒤 `pangpang_saves` 표에 올라가요(`pangpang_cloud_put` / `pangpang_cloud_get`).
+- 설정 › 기록 자동 저장: 내 코드 보기·복사, 다른 기기 코드 넣어서 불러오기. 새 기기 첫 화면 아래에도 "다른 기기 기록 불러오기"가 떠요.
+- 두 기록을 합칠 때는 더 많이 간 쪽으로 맞춰요(`mergeSave`: 단계·별·최고 기록은 큰 값, 쓸 수 있는 점수는 더 많이 한 쪽 기록).
+- 소리·진동·밝기 같은 설정과 하던 판은 기기에만 남아요.
+- 기록 지우기(요청이 오면): `delete from public.pangpang_saves where code = 'ABCDEFGH2345';`

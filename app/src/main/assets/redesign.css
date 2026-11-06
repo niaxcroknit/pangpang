@@ -303,3 +303,9 @@ html,body{background:var(--page) fixed!important;min-height:100%}
 .nick-in{font:800 20px var(--body);text-align:center}
 .nick-err{color:var(--accent);font-weight:800;font-size:15px;min-height:20px;margin:0}
 .quiet-icon#btnRank svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== 기록 자동 저장 ===== */
+.cloud-code{font:900 30px/1.2 var(--body);letter-spacing:2px;text-align:center;padding:16px 10px;border-radius:18px;background:rgba(255,255,255,.62);border:1.5px solid rgba(255,255,255,.95);box-shadow:0 2px 6px -3px rgba(70,110,170,.25);color:var(--ink);user-select:all;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cloud-code{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.cloud-at{margin:-4px 0 0;text-align:center;color:var(--muted);font-weight:700;font-size:14px}
+.cloud-warn{font-size:14px}
